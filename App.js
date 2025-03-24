@@ -1,9 +1,9 @@
 import React, { useState } from 'react'; // Importing react and useState
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'; // Import necessary components for the UI
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'; // Import necessary components for the UI
 import { Calendar } from 'react-native-calendars'; // Importing a calendar to allow users to select a date
 import { Ionicons } from '@expo/vector-icons'; // Provides the icons needed for the UI
-
+import circle from './assets/circles_.png';
 // The function below defines the main component, where it defines the state of the task name, description, date to be done, and priority
 export default function App() {
   const [task, setTask] = useState(''); // default value of task is empty string
@@ -22,8 +22,15 @@ export default function App() {
   };
 
   return (
+    
     <View style={styles.container}>
-      {/*The code below displays the "task" text and the textbox where the user will input the task name*/}
+      {/*The code below displays the "task" text and the textbox where the user will input the task name, including the two circles*/}
+         <View style={styles.image}>
+      <Image
+        source={circle}
+      />
+     </View>
+
       <Text style={styles.label}>Task:</Text>
       <TextInput
         style={styles.input}
@@ -40,6 +47,7 @@ export default function App() {
         value={description} 
         onChangeText={setDescription} // when the text is inputted, this function will be called to set the description value 
       />
+      
 
       <Text style={styles.dateLabel}>Date: {selectedDate}</Text>
       <Calendar
@@ -91,7 +99,7 @@ export default function App() {
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
       <StatusBar style="auto" />
-    </View>
+    </View> 
   );
 }
 // The following code below defines the style (color, appearance, alignment, etc.) of each component in the UI
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
     justifyContent: 'flex-start',
-    paddingTop: 90, 
+    paddingTop: 90,
   },
   label: {
     fontSize: 16,
@@ -126,6 +134,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     marginRight: 10, 
+  },
+  image: {
+    position: 'absolute',
+    top:0, 
+    left:0,
+    width: 200,
+    height:200,
+    resizeMode: 'contain',
   },
   priorityRow: {
     flexDirection: 'row',
@@ -160,5 +176,25 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
-  },
+  }, 
+  circle1: {
+    position: 'absolute',
+    width: 260,
+    height: 260,
+    borderRadius: 155,
+    backgroundColor: 'rgba(160, 227, 227, 0.5)',
+    top: -270,
+    right: 90,
+    left: -20,
+    },
+    circle2: {
+    position: 'absolute',
+    width: 240,
+    height: 240,
+    borderRadius: 125,
+    backgroundColor: 'rgba(160, 227, 227, 0.5)',
+    top: -180,
+    right: 200,
+    left: -120,
+    },
 });
