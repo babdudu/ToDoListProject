@@ -7,7 +7,6 @@ import top_corner from './assets/top_corner.png'; // importing the image for bac
 import {collection, addDoc} from 'firebase/firestore'; // Importing the necessary components to connect to the database
 import { FIREBASE_FIRESTORE } from './FirebaseConfig';
 import { getAuth } from 'firebase/auth';
-import { createTodoTask } from './create';
 import { getDatabase, ref, set } from 'firebase/database';
 
 // The function below defines the main component, where it defines the state of the task name, description, date to be done, and priority
@@ -154,7 +153,7 @@ const AddingToDoPage = () => {
 
         <TouchableOpacity style={styles.cancelButton}>
         {/* This views the last two buttons in the page, which are the "Link to child" button and "Save" button */}
-        <Text style={{color: 'grey'}}>Go to back</Text> 
+        <Text style={{color: 'grey'}}>Go back</Text> 
         </TouchableOpacity>
     </View> 
   );
