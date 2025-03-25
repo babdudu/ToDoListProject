@@ -3,13 +3,21 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'; // Import necessary components for the UI
 import { Calendar } from 'react-native-calendars'; // Importing a calendar to allow users to select a date
 import { Ionicons } from '@expo/vector-icons'; // Provides the icons needed for the UI
-import circle from './assets/circles_.png'; // importing the image for background
+import top_corner from './assets/top_corner.png'; // importing the image for background
+import {collection, addDoc} from 'firebase/firestore'; // Importing the necessary components to connect to the database
+import { FIREBASE_FIRESTORE } from './FirebaseConfig';
+import { getAuth } from 'firebase/auth';
+import { createTodoTask } from './create';
+import { getDatabase, ref, set } from 'firebase/database';
+
 // The function below defines the main component, where it defines the state of the task name, description, date to be done, and priority
-export default function App() {
+const AddingToDoPage = () => {
   const [task, setTask] = useState(''); // default value of task is empty string
   const [description, setDescription] = useState(''); // default value of description is empty string
   const [selectedDate, setSelectedDate] = useState(''); // default value of selected date is empty string
   const [priority, setPriority] = useState(0); // Priority in this case is 0 (no priority) there are three total levels (1,2,3) which indicate low, medium, and high
+  
+  const user = getAuth().currentUser; // This gets the current user logged in
 
   // The code below updates the "setSelectedDate" constant to the selected date in YYYY-MM-DD format
   const onDayPress = (day) => {
@@ -20,6 +28,45 @@ export default function App() {
   const prioritySelect = (level) => {
     setPriority(level);
   };
+  
+
+
+  //WRITING TO DO LIST TASKS INTO DATABASE 
+  //https://www.youtube.com/watch?v=9orKRpPMveY&t=1928s (from : 30:40-34:10)
+  //https://firebase.google.com/docs/auth/web/manage-users#web-version-8
+  //https://github.com/jayisback11/firebase-todo-list/tree/master/src/components
+  const writeToDatabase = () => {
+    try {
+      const auth = getAuth();
+      const db = getDatabase(); 
+      //getting the current signed in user 
+      const user = auth.currentUser;
+      //unique ID based on the user 
+      const uidd = Date.now(); 
+      
+      //reference the database, for each user: which has a unique user UID, the task, description, and date is saved 
+      set(ref(db, `/${user.uid}/${uidd}`),  {
+        // save the task as task on the database 
+        task: task, 
+        // save the description as description on the database 
+        description: description, 
+        // save the date as date on the database
+        date: selectedDate, 
+      });
+      //indicating success of operation
+      alert('Task saved successfully!');
+      //clearing fields 
+      setTask(''); 
+      setDescription(''); 
+      setSelectedDate(''); 
+    } 
+    catch (error) {
+      console.error('Error saving task: ', error);
+      alert('Failed to save task. Please try again.');
+    }
+  };
+
+
 
   return (
     
@@ -27,7 +74,7 @@ export default function App() {
       {/*The code below displays the circles in the background*/}
          <View style={styles.image}>
       <Image
-        source={circle}
+        source={top_corner}
       />
      </View>
      {/* The code below creates the textbox that is meant for inputting the task name */}
@@ -35,16 +82,17 @@ export default function App() {
       <TextInput
         style={styles.input}
         placeholder="Input the task name!" // this will be viewed in the text box
-        onChangeText={setTask} // This will update the state of "task" based on what the user inputted
+        value = {task}
+        onChangeText={(text) => setTask(text)} // This will update the state of "task" based on what the user inputted
       />
 
       {/* This applies the same functionality as the code above but for description of the task*/}
-      <Text style={styles.label}>Description:</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Describe the task!" // this will be viewed in the description textbox
-        onChangeText={setDescription} // when the text is inputted, this function will be called to set the description value 
-      />
+      style={styles.input}
+      placeholder="Describe the task!" // this will be viewed in the description textbox
+      value={description}
+      onChangeText={(text) => setDescription(text)} // Corrected handler
+/>
       
       {/* The code below views the calendar, and edits the color of it */}
       <Text style={styles.dateLabel}>Date: {selectedDate}</Text>
@@ -91,13 +139,16 @@ export default function App() {
         </TouchableOpacity>
       </View>
 
+      {/* when user clicks save, the writeToDatabase() is called to write to the database the content*/}
+      <TouchableOpacity style={styles.saveButton} onPress={writeToDatabase}>
+        <Text style={styles.buttonText}>Save</Text>
+      </TouchableOpacity>
+      
       <TouchableOpacity style={styles.button}>
         {/* This views the last two buttons in the page, which are the "Link to child" button and "Save" button */}
         <Text style={styles.buttonText}>Link to Child</Text> 
         </TouchableOpacity>
-        <TouchableOpacity style={styles.saveButton}>
-        <Text style={styles.buttonText}>Save</Text>
-      </TouchableOpacity>
+        
     </View> 
   );
 }
@@ -181,3 +232,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', // make the font bold
   }, 
 });
+export default AddingToDoPage;
