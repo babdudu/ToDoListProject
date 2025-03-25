@@ -71,14 +71,17 @@ const AddingToDoPage = () => {
   return (
     
     <View style={styles.container}>
+
       {/*The code below displays the circles in the background*/}
          <View style={styles.image}>
       <Image
         source={top_corner}
       />
+
      </View>
      {/* The code below creates the textbox that is meant for inputting the task name */}
       <Text style={styles.label}>Task:</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Input the task name!" // this will be viewed in the text box
@@ -92,7 +95,7 @@ const AddingToDoPage = () => {
       placeholder="Describe the task!" // this will be viewed in the description textbox
       value={description}
       onChangeText={(text) => setDescription(text)} // Corrected handler
-/>
+      />
       
       {/* The code below views the calendar, and edits the color of it */}
       <Text style={styles.dateLabel}>Date: {selectedDate}</Text>
@@ -148,7 +151,11 @@ const AddingToDoPage = () => {
         {/* This views the last two buttons in the page, which are the "Link to child" button and "Save" button */}
         <Text style={styles.buttonText}>Link to Child</Text> 
         </TouchableOpacity>
-        
+
+        <TouchableOpacity style={styles.cancelButton}>
+        {/* This views the last two buttons in the page, which are the "Link to child" button and "Save" button */}
+        <Text style={{color: 'grey'}}>Go to back</Text> 
+        </TouchableOpacity>
     </View> 
   );
 }
@@ -157,7 +164,7 @@ const styles = StyleSheet.create({
   // Here we make the container for all the components in the page, 
   container: {
     flexGrow: 1, // taking up extra space available on the phone 
-    backgroundColor: '#fff', // setting bavkground color to white
+    backgroundColor: '#fff', // setting background color to white
     padding: 20, // adding padding across the screen edge (so components dont look expanded)
     paddingTop: 80, // add padding only in the top (make components go lower)
   },
@@ -166,6 +173,8 @@ const styles = StyleSheet.create({
     fontSize: 16, // adjusting fotn size
     color: '#333', // setting font color to black
     marginBottom: 5, // creating space between the font and whats below it 
+    position: 'relative',
+    zIndex: 1,
   },
   // these are the styles for the two textboxes on the top page
   input: {
@@ -175,7 +184,9 @@ const styles = StyleSheet.create({
     marginBottom: 15, // creating a space between the text box and whats below it
     paddingHorizontal: 15, // creating the horizontal padding for the text to be inputted in the textbox
     borderRadius: 7, // roundness of the edges
-    backgroundColor: 'rgba(247, 136, 136, 0.3)', // setting background color of the textbox
+    backgroundColor: 'rgba(247, 136, 136, 0.61)', // setting background color of the textbox
+    position: 'relative',
+    zIndex: 1,
   },
   // The style below is strictly for the date label
   dateLabel: {
@@ -207,7 +218,7 @@ const styles = StyleSheet.create({
   },
   // code below sets the background color of the priority button depending on the icon pressed
   selectedPriority: (color) => ({
-    backgroundColor: color === 1 ? '#CCFFCC' : color === 2 ? '#FFE5CC' : '#FFCCCC',
+    backgroundColor: color === 1 ? '#CCFFCC' : color === 2 ? '#FFE5CC' : '#FFCCCC', 
     borderRadius: 7, // sets the radius of the border (the more it is the smoother the borders are) 
   }),
   // sets the style of the linkToChild button
@@ -224,8 +235,20 @@ const styles = StyleSheet.create({
     padding: 15, // creates distance between text in button and button edges
     borderRadius: 5, // smoothens the border
     alignItems: 'center', // aligns text in button to be in center
-    marginTop: 4, // creates distance between button and components above it 
+    marginTop: 1, // creates distance between button and components above it 
   },
+
+  cancelButton: {
+    backgroundColor: 'transparent', // setting background color to white
+    padding: 5, // sets space between text and edge of button
+    marginBottom: 10,
+    marginHorizontal: 126,
+    borderRadius: 5, // sets smoothness of borders
+    alignItems: 'center', // align the text of the button to the center
+    marginVertical: 5, // sets space between the button and other vertically present components 
+    top: -3,
+  },
+
   // style below sets the text of the buttons
   buttonText: {
     color: '#fff', // set color to white
