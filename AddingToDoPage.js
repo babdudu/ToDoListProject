@@ -1,27 +1,50 @@
 import React, { useState } from 'react'; // Importing react and useState
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'; // Import necessary components for the UI
-import { Calendar } from 'react-native-calendars'; // Importing a calendar to allow users to select a date
+import { StyleSheet, ScrollView, Text, View, TextInput, Platform, TouchableOpacity, Image, Pressable } from 'react-native'; // Import necessary components for the UI
 import { Ionicons } from '@expo/vector-icons'; // Provides the icons needed for the UI
 import top_corner from './assets/top_corner.png'; // importing the image for background
 import {collection, addDoc} from 'firebase/firestore'; // Importing the necessary components to connect to the database
 import { FIREBASE_FIRESTORE } from './FirebaseConfig';
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, set } from 'firebase/database';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 // The function below defines the main component, where it defines the state of the task name, description, date to be done, and priority
 const AddingToDoPage = () => {
   const [task, setTask] = useState(''); // default value of task is empty string
   const [description, setDescription] = useState(''); // default value of description is empty string
-  const [selectedDate, setSelectedDate] = useState(''); // default value of selected date is empty string
+  const [selectedDate, setSelectedDate] = useState(new Date()); // default value of selected date is a new date
   const [priority, setPriority] = useState(0); // Priority in this case is 0 (no priority) there are three total levels (1,2,3) which indicate low, medium, and high
-  
+  const [showPicker, setPicker] = useState(false);
   const user = getAuth().currentUser; // This gets the current user logged in
 
-  // The code below updates the "setSelectedDate" constant to the selected date in YYYY-MM-DD format
-  const onDayPress = (day) => {
-    setSelectedDate(day.dateString);
+
+  const toggleDatePicker = () => {
+    setPicker(!showPicker)
   };
+
+  const onChange = ({ type }, selectedDate) => {
+    if (type == "set") {
+      const dateSelected =selectedDate;
+      setSelectedDate(dateSelected)
+      if(Platform.OS === "android") {
+        toggleDatePicker();
+        setSelectedDate(dateSelected.toDateString());
+      }
+    } else {
+      toggleDatePicker();
+    }
+  };
+
+  const confirmDateIOS = () => {
+    const formattedDate = selectedDate
+      ? selectedDate.toLocaleDateString("en-GB") // 'en-GB' uses DD/MM/YYYY format
+      : "";
+  
+    setSelectedDate(formattedDate);
+    toggleDatePicker();
+  };
+  
 
   // The code below updates the setPriority constant to the new priority level selected
   const prioritySelect = (level) => {
@@ -69,8 +92,8 @@ const AddingToDoPage = () => {
 
   return (
     
-    <View style={styles.container}>
-
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.container}>
       {/*The code below displays the circles in the background*/}
          <View style={styles.image}>
       <Image
@@ -79,8 +102,9 @@ const AddingToDoPage = () => {
 
      </View>
      {/* The code below creates the textbox that is meant for inputting the task name */}
-      <Text style={styles.label}>Task:</Text>
+      <Text style={styles.label}>New Task</Text>
 
+      
       <TextInput
         style={styles.input}
         placeholder="Input the task name!" // this will be viewed in the text box
@@ -90,29 +114,73 @@ const AddingToDoPage = () => {
 
       {/* This applies the same functionality as the code above but for description of the task*/}
       <TextInput
-      style={styles.input}
+      style={styles.inputDesc}
       placeholder="Describe the task!" // this will be viewed in the description textbox
       value={description}
+      multiline = {true}
+      
       onChangeText={(text) => setDescription(text)} // Corrected handler
       />
       
-      {/* The code below views the calendar, and edits the color of it */}
-      <Text style={styles.dateLabel}>Date: {selectedDate}</Text>
-      <Calendar
-        onDayPress={onDayPress} // Calls the onDayPress function when a date is selected to make it in the specified YYY-MM-DD format 
-        markedDates={{ [selectedDate]: { selected: true, marked: true, selectedColor: 'rgba(78, 197, 197, 1)' } }} // when a date is selected, its color will be changed to teal
-        theme={{
-          // The following code below formats colors of specific components in the calendar 
-          selectedDayBackgroundColor: 'rgba(78, 197, 197, 1)',
-          arrowColor: '#333', // setting color of the arrow to black
-          monthTextColor: '#333', // selecting color of the month to black
-          indicatorColor: 'rgba(78, 197, 197, 1)', // setting color for when the date is selected
-        }}
-      />
-      
+      {/* The code below views the date picker, source from https://www.youtube.com/watch?v=UEfFjfW7Zes*/}
+      <View>
+        <Text style={styles.dateLabel}>Date</Text>
+        {showPicker && (
+        <DateTimePicker 
+        mode = "date"
+        display = "spinner"
+        value = {selectedDate}
+        onChange = {onChange}
+        style = {styles.datePicker}
+        />
+        )}
+
+        {showPicker && Platform.OS === "ios" && (
+          <View 
+          style = {{ flexDirection: "row", 
+          justifyContent: "space-around"
+          }}
+          >
+            <TouchableOpacity style= {[
+              styles.dateButton
+            ]}
+            onPress = {toggleDatePicker}
+            >
+              <Text style = {[styles.buttonText]}>Cancel</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style= {[
+              styles.dateButton
+            ]}
+            onPress = {confirmDateIOS}
+            >
+              <Text style = {[styles.buttonText]}>Confirm</Text>
+            </TouchableOpacity>
+
+        </View>
+        )}
+
+        {!showPicker && (
+          <Pressable
+          onPress ={toggleDatePicker}
+          > 
+          <TextInput 
+          style={styles.dateTB}
+          placeholder="Click to select a date"
+          value = {selectedDate}
+          onChangeText={setSelectedDate}
+          placeHolderTextColor = "gray"
+          editable = {false}
+          onPressIn = {toggleDatePicker}
+          />
+          </Pressable>
+        )}
+        
+      </View>
+      <Text style={styles.priorityLabel}>Priority</Text>
+
       {/* Code below displays "Set priority" text including the thermometer icons */}
       <View style={styles.priorityRow}>
-        <Text style={styles.priorityLabel}>Set Priority:</Text>
         <TouchableOpacity
         // this creates the priority button (low/green) and changes the value of priority if the button was pressed on
           style={[styles.priorityButton, priority === 1 && styles.selectedPriority(1)]}
@@ -156,6 +224,8 @@ const AddingToDoPage = () => {
         <Text style={{color: 'grey'}}>Go back</Text> 
         </TouchableOpacity>
     </View> 
+    </ScrollView>
+
   );
 }
 // The following code below defines the style (color, appearance, alignment, etc.) of each component in the UI
@@ -169,11 +239,13 @@ const styles = StyleSheet.create({
   },
   // the label below is strictly for the labels on top of the firts two textboxes
   label: {
-    fontSize: 16, // adjusting fotn size
-    color: '#333', // setting font color to black
+    fontSize: 20, // adjusting fotn size
+    color: 'gray', // setting font color to black
     marginBottom: 5, // creating space between the font and whats below it 
     position: 'relative',
     zIndex: 1,
+    fontWeight: "bold",
+    marginBottom: 15,
   },
   // these are the styles for the two textboxes on the top page
   input: {
@@ -187,17 +259,40 @@ const styles = StyleSheet.create({
     position: 'relative',
     zIndex: 1,
   },
+  inputDesc: {
+    marginTop: 8,
+    borderColor: '#ccc', // setting the border color to grey
+    borderWidth: 1, // setting border width/thickness
+    marginBottom: 15, // creating a space between the text box and whats below it
+    paddingHorizontal: 14, // creating the horizontal padding for the text to be inputted in the textbox
+    borderRadius: 7, // roundness of the edges
+    backgroundColor: 'rgba(247, 136, 136, 0.61)', // setting background color of the textbox
+    position: 'relative',
+    width: "100%",
+    minHeight: 170,
+    textAlignVertical: "top", // ensuring text starts from top
+    ...Platform.select({
+      ios: {
+        paddingTop: 10,
+      },
+    }),
+    zIndex: 1,
+  },
   // The style below is strictly for the date label
   dateLabel: {
     marginBottom: 15, // setting distance between the date and whats below it
-    fontSize: 16, // setting font size
-    color: '#333', // setting font color to black
+    fontSize: 17, // setting font size
+    color: 'gray', // setting font color to black
+    fontWeight: "bold",
+    marginTop: 10,
   },
   // this style is strictly for the priority label
   priorityLabel: {
-    fontSize: 16, // setting font size
-    color: '#333', // setting font color
-    marginRight: 10, // setting distance between the label and whats on the right of it
+    fontSize: 17, // setting font size
+    color: 'gray', // setting font color
+    fontWeight: "bold",
+    marginTop: 20,
+    marginRight: 56, // setting distance between the label and whats on the right of it
   },
   // this style is for the images on top of the page
   image: {
@@ -208,12 +303,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // makes child elements (elements created under it) line up horizontally
     alignItems: 'center', // aligns child elements to the center
     marginBottom: 20, // creates a space between it and the bottom components
-    marginTop: 20,    // creates space between it and top components
+    marginTop: 15,    // creates space between it and top components
+    paddingVertical: 4,
+    borderRadius: 6,
   },
 // this style is for the priority buttons/icons
   priorityButton: {
-    padding: 8, // this increases the overall padding around the button
-    marginHorizontal: 9, // this creates the distance between the button from the right and left between other components
+    padding: 20, // this increases the overall padding around the button
+    marginHorizontal: 30, // this creates the distance between the button from the right and left between other components
   },
   // code below sets the background color of the priority button depending on the icon pressed
   selectedPriority: (color) => ({
@@ -234,7 +331,7 @@ const styles = StyleSheet.create({
     padding: 15, // creates distance between text in button and button edges
     borderRadius: 5, // smoothens the border
     alignItems: 'center', // aligns text in button to be in center
-    marginTop: 1, // creates distance between button and components above it 
+    marginTop: 15, // creates distance between button and components above it 
   },
 
   cancelButton: {
@@ -253,5 +350,29 @@ const styles = StyleSheet.create({
     color: '#fff', // set color to white
     fontWeight: 'bold', // make the font bold
   }, 
+  dateTB: {
+    height: 50, // setting the height of the pages (how long it it)
+    borderColor: '#ccc', // setting the border color to grey
+    borderWidth: 1, // setting border width/thickness
+    borderRadius: 5,
+    marginBottom: 10, // creating a space between the text box and whats below it
+    paddingHorizontal: 15, // creating the horizontal padding for the text to be inputted in the textbox
+    backgroundColor: 'rgba(247, 136, 136, 0.61)', // setting background color of the textbox
+  },
+  datePicker: {
+    height: 110,
+    marginTop: -10,
+  }, 
+  dateButton: {
+    paddingHorizontal: 45,
+    marginVertical: 5,
+    paddingVertical: 7,
+    borderRadius: 6,
+    backgroundColor: 'rgba(247, 136, 136, 1)',
+  },
+  scrollContainer: {
+    flex: 1,
+    padding: -10,
+  },
 });
 export default AddingToDoPage;
