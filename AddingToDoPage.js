@@ -29,7 +29,7 @@ const AddingToDoPage = () => {
       setSelectedDate(dateSelected)
       if(Platform.OS === "android") {
         toggleDatePicker();
-        setSelectedDate(dateSelected.toDateString());
+        setSelectedDate(dateSelected);
       }
     } else {
       toggleDatePicker();
@@ -37,11 +37,6 @@ const AddingToDoPage = () => {
   };
 
   const confirmDateIOS = () => {
-    const formattedDate = selectedDate
-      ? selectedDate.toLocaleDateString("en-GB") // 'en-GB' uses DD/MM/YYYY format
-      : "";
-  
-    setSelectedDate(formattedDate);
     toggleDatePicker();
   };
   
@@ -101,17 +96,20 @@ const AddingToDoPage = () => {
       />
 
      </View>
-     {/* The code below creates the textbox that is meant for inputting the task name */}
-      <Text style={styles.label}>New Task</Text>
+     <View style={styles.labelRow}>
+      <Ionicons name="add-circle" size={30} color="rgba(247, 136, 136, 1)" /> 
+      <Text style={styles.label}>Add a New Task</Text>
+     </View>
+     
 
-      
+      <Text style = {styles.labelTB}>Task Name</Text>
       <TextInput
         style={styles.input}
         placeholder="Input the task name!" // this will be viewed in the text box
         value = {task}
         onChangeText={(text) => setTask(text)} // This will update the state of "task" based on what the user inputted
       />
-
+   <Text style = {styles.descTB}>Description</Text>
       {/* This applies the same functionality as the code above but for description of the task*/}
       <TextInput
       style={styles.inputDesc}
@@ -167,7 +165,7 @@ const AddingToDoPage = () => {
           <TextInput 
           style={styles.dateTB}
           placeholder="Click to select a date"
-          value = {selectedDate}
+          value={selectedDate ? selectedDate.toLocaleDateString("en-GB") : ""}
           onChangeText={setSelectedDate}
           placeHolderTextColor = "gray"
           editable = {false}
@@ -239,13 +237,24 @@ const styles = StyleSheet.create({
   },
   // the label below is strictly for the labels on top of the firts two textboxes
   label: {
-    fontSize: 20, // adjusting fotn size
-    color: 'gray', // setting font color to black
-    marginBottom: 5, // creating space between the font and whats below it 
+    fontSize: 30, // adjusting fotn size
+    color: 'rgb(247, 136, 136)', // setting font color to black
     position: 'relative',
     zIndex: 1,
     fontWeight: "bold",
-    marginBottom: 15,
+    left: 3,
+  },
+  labelTB: {
+    color: 'gray',
+    fontSize: 17,
+    marginTop: 8,
+    fontWeight: "bold",
+  }, 
+  descTB: {
+    color: 'gray',
+    fontSize: 17,
+    marginTop: 5,
+    fontWeight: "bold",
   },
   // these are the styles for the two textboxes on the top page
   input: {
@@ -255,9 +264,13 @@ const styles = StyleSheet.create({
     marginBottom: 15, // creating a space between the text box and whats below it
     paddingHorizontal: 15, // creating the horizontal padding for the text to be inputted in the textbox
     borderRadius: 7, // roundness of the edges
-    backgroundColor: 'rgba(247, 136, 136, 0.61)', // setting background color of the textbox
+    backgroundColor: 'white', // setting background color of the textbox
+    borderColor: 'rgba(247, 136, 136, 0.61)',
+    marginTop: 8,
     position: 'relative',
     zIndex: 1,
+    color: 'gray',
+    fontSize: 16,
   },
   inputDesc: {
     marginTop: 8,
@@ -266,10 +279,13 @@ const styles = StyleSheet.create({
     marginBottom: 15, // creating a space between the text box and whats below it
     paddingHorizontal: 14, // creating the horizontal padding for the text to be inputted in the textbox
     borderRadius: 7, // roundness of the edges
-    backgroundColor: 'rgba(247, 136, 136, 0.61)', // setting background color of the textbox
+    backgroundColor: 'white', // setting background color of the textbox
+    borderColor: 'rgba(247, 136, 136, 0.61)',
     position: 'relative',
     width: "100%",
-    minHeight: 170,
+    color: 'gray',
+    minHeight: 90,
+    fontSize: 16,
     textAlignVertical: "top", // ensuring text starts from top
     ...Platform.select({
       ios: {
@@ -280,18 +296,18 @@ const styles = StyleSheet.create({
   },
   // The style below is strictly for the date label
   dateLabel: {
-    marginBottom: 15, // setting distance between the date and whats below it
+    marginBottom: 8, // setting distance between the date and whats below it
     fontSize: 17, // setting font size
     color: 'gray', // setting font color to black
     fontWeight: "bold",
-    marginTop: 10,
+    marginTop: 5,
   },
   // this style is strictly for the priority label
   priorityLabel: {
     fontSize: 17, // setting font size
     color: 'gray', // setting font color
     fontWeight: "bold",
-    marginTop: 20,
+    marginTop: 8,
     marginRight: 56, // setting distance between the label and whats on the right of it
   },
   // this style is for the images on top of the page
@@ -302,10 +318,20 @@ const styles = StyleSheet.create({
   priorityRow: {
     flexDirection: 'row', // makes child elements (elements created under it) line up horizontally
     alignItems: 'center', // aligns child elements to the center
-    marginBottom: 20, // creates a space between it and the bottom components
-    marginTop: 15,    // creates space between it and top components
+    marginBottom: 12, // creates a space between it and the bottom components
+    marginTop: 16,    // creates space between it and top components
     paddingVertical: 4,
     borderRadius: 6,
+  },
+
+  labelRow: {
+    flexDirection: 'row', // makes child elements (elements created under it) line up horizontally
+    alignItems: 'center', // aligns child elements to the center
+    marginTop: 70,    // creates space between it and top components
+    paddingVertical: 4,
+    marginBottom: 1, // creates a space between it and the bottom components
+    borderRadius: 6,
+    left: 90,
   },
 // this style is for the priority buttons/icons
   priorityButton: {
@@ -331,7 +357,7 @@ const styles = StyleSheet.create({
     padding: 15, // creates distance between text in button and button edges
     borderRadius: 5, // smoothens the border
     alignItems: 'center', // aligns text in button to be in center
-    marginTop: 15, // creates distance between button and components above it 
+    marginTop: 18, // creates distance between button and components above it 
   },
 
   cancelButton: {
@@ -357,7 +383,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10, // creating a space between the text box and whats below it
     paddingHorizontal: 15, // creating the horizontal padding for the text to be inputted in the textbox
-    backgroundColor: 'rgba(247, 136, 136, 0.61)', // setting background color of the textbox
+    backgroundColor: 'white', // setting background color of the textbox
+    borderColor: 'rgba(247, 136, 136, 0.61)',
+    color: 'gray',
+    fontSize: 16,
   },
   datePicker: {
     height: 110,
