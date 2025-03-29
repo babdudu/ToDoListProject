@@ -48,40 +48,7 @@ const AddingToDoPage = () => {
   
 
 
-  //WRITING TO DO LIST TASKS INTO DATABASE 
-  //https://www.youtube.com/watch?v=9orKRpPMveY&t=1928s (from : 30:40-34:10)
-  //https://firebase.google.com/docs/auth/web/manage-users#web-version-8
-  //https://github.com/jayisback11/firebase-todo-list/tree/master/src/components
-  const writeToDatabase = () => {
-    try {
-      const auth = getAuth();
-      const db = getDatabase(); 
-      //getting the current signed in user 
-      const user = auth.currentUser;
-      //unique ID based on the user 
-      const uidd = Date.now(); 
-      
-      //reference the database, for each user: which has a unique user UID, the task, description, and date is saved 
-      set(ref(db, `/${user.uid}/${uidd}`),  {
-        // save the task as task on the database 
-        task: task, 
-        // save the description as description on the database 
-        description: description, 
-        // save the date as date on the database
-        date: selectedDate, 
-      });
-      //indicating success of operation
-      alert('Task saved successfully!');
-      //clearing fields 
-      setTask(''); 
-      setDescription(''); 
-      setSelectedDate(''); 
-    } 
-    catch (error) {
-      console.error('Error saving task: ', error);
-      alert('Failed to save task. Please try again.');
-    }
-  };
+  //PUT EDIT FIREBASE FUNCTION HERE
 
 
 
