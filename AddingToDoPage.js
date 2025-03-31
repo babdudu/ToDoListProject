@@ -16,7 +16,7 @@ const AddingToDoPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date()); // default value of selected date is a new date
   const [priority, setPriority] = useState(0); // Priority in this case is 0 (no priority) there are three total levels (1,2,3) which indicate low, medium, and high
   const [showPicker, setPicker] = useState(false);
-  const user = getAuth().currentUser; // This gets the current user logged in
+  //const user = getAuth().currentUser; // This gets the current user logged in
 
 
   const toggleDatePicker = () => {
@@ -61,6 +61,8 @@ const AddingToDoPage = () => {
       //unique ID based on the user 
       const uidd = Date.now(); 
       
+      const formattedDate = selectedDate ? selectedDate.toISOString().split("T")[0] : '';
+      
       //reference the database, for each user: which has a unique user UID, the task, description, and date is saved 
       set(ref(db, `/${user.uid}/${uidd}`),  {
         // save the task as task on the database 
@@ -68,7 +70,11 @@ const AddingToDoPage = () => {
         // save the description as description on the database 
         description: description, 
         // save the date as date on the database
-        date: selectedDate, 
+        date: formattedDate, 
+        //save completed 
+        completed: false,
+        //save priority 
+        priority: priority,
       });
       //indicating success of operation
       alert('Task saved successfully!');
