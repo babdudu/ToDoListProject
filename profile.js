@@ -1,14 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet, SafeAreaView, TextInput, Image, TouchableOpacity } from "react-native";
+import { View, Text,  ScrollView, StyleSheet, SafeAreaView, TextInput, Image, TouchableOpacity } from "react-native";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { Ionicons } from '@expo/vector-icons'; // Provides the icons needed for the UI
+import { SelectList } from 'react-native-dropdown-select-list'
 
 const Profile = () => {
   const [children, setChildren] = useState([]);
   const [name, setName] = useState(""); 
   const [age, setAge] = useState(""); 
-  const [color, setColor] = useState(""); 
   const auth = getAuth();
+  const [color, setColor] = useState("");
+  const [selected, setSelected] = useState(""); // Add a state variable for the selected value
+
+
+  const colorOptions = [
+    { label: 'Red', value: 'red' },
+    { label: 'Green', value: 'green' },
+    { label: 'Blue', value: 'blue' },
+    { label: 'Yellow', value: 'yellow' },
+    { label: 'Purple', value: 'purple' },
+    { label: 'Orange', value: 'orange' },
+    { label: 'Pink', value: 'pink' },
+  ];
 
 
   const addChild = () => {
@@ -38,15 +52,21 @@ const Profile = () => {
 
 
   return (
+
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
     <SafeAreaView style={styles.container}>
        
+        <View style={styles.image}>
+
         <Image
-             source={require('./assets/top_corner.png')} 
-             style={styles.topImage}
+             source={require('./top_corner.png')} 
              
           />
+        </View>
+        
       <View style={styles.header}>
-        <Text style={styles.title}>Child</Text>
+         <Ionicons name="person-add-outline" size={28} color="rgba(247, 136, 136, 1)" />
+        <Text style={styles.title}>Add Child</Text>
       </View>
    
       <Text style = {styles.labelTB}>Child Name</Text>
@@ -67,105 +87,141 @@ const Profile = () => {
         />
 
       <Text style = {styles.labelTB}>Color</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="I associate my child with the color"
-          value={color}
-          onChangeText={setColor}
-        />
+      <SelectList 
+        setSelected={(val) => {
+          setSelected(val); // Update the selected state
+          setColor(val); // Update the color state
+        }}
+        data={colorOptions} 
+        save="value"
+        boxStyles={styles.selectBox} 
+        dropdownStyles={styles.dropdown} 
+        inputStyles={styles.dDText}
+        dropdownTextStyles={styles.dDText} 
+    />
 
         <TouchableOpacity style={styles.addButton} onPress={addChild}>
           <Text style={styles.addButtonText}>Add Child</Text>
         </TouchableOpacity>
     
+    <TouchableOpacity style={styles.cancelButton}>
+            {/* This views the last two buttons in the page, which are the "Link to child" button and "Save" button */}
+            <Text style={{color: 'grey'}}>Go back</Text> 
+            </TouchableOpacity>
     </SafeAreaView>
+
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E7EFEF",
+    backgroundColor: "#fff",
     paddingHorizontal: 20,
     paddingBottom: 60,
+    padding: 10,
   },
   header: {
     alignItems: "center",
-    marginVertical: 20,
+    flexDirection: 'row',
+    left: 175,
+    marginTop: 140,
+    marginBottom: 5,
+    alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
-    color: "#333",
-  },
-  listContainer: {
-    paddingHorizontal: 32,
-    paddingVertical: 20,
-  },
-  childContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    padding: 12,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#FD6262",
-    marginVertical: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
-  childText: {
-    fontSize: 16,
-    color: "#333",
-    marginBottom: 5,
-  },
-  footer: {
-    marginTop: 20,
-  },
-  // these are the styles for the two textboxes on the top page
+    color: "rgba(247, 136, 136, 1)",
+    left: 10,
+  }, 
   input: {
     height: 40, // setting the height of the pages (how long it it)
     borderColor: '#ccc', // setting the border color to grey
     borderWidth: 1, // setting border width/thickness
-    marginBottom: 15, // creating a space between the text box and whats below it
+    marginBottom: 30, // creating a space between the text box and whats below it
     paddingHorizontal: 15, // creating the horizontal padding for the text to be inputted in the textbox
     borderRadius: 7, // roundness of the edges
-    backgroundColor: 'rgba(247, 136, 136, 0.3)', // setting background color of the textbox
-    width: '80%',
+    left: 20,
+    fontSize: 16,
+    borderColor: 'rgba(247, 136, 136, 1)',
+    backgroundColor: 'transparent', // setting background color of the textbox
+    width: '90%',
+    color: 'gray',
   },
   labelTB: {
     color: 'gray',
     fontSize: 17,
-    marginTop: 8,
     fontWeight: "bold",
+    left: 20,
+    marginTop: 5,
+    marginBottom: 15,
   }, 
-  // The style below is strictly for the date label
-  dateLabel: {
-    marginBottom: 15, // setting distance between the date and whats below it
-    fontSize: 16, // setting font size
-    color: '#333', // setting font color to black
-  },
+  
   addButton: {
-    backgroundColor: "#4CAF50",
-    padding: 10,
+    marginTop: 30,
+    height: 60,
+    padding: 20,
+    width: '80%',
+    left: 40,
     borderRadius: 5,
     alignItems: "center",
+    backgroundColor: 'rgba(247, 136, 136, 1)', 
   },
+
   addButtonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
   },
   
-    topImage: {
-      position: 'absolute', 
-      width: 260,          
-      height: 260,  
-      top: -180, 
-      right: 90, 
-      left: -50,    
+    image: {
+      position: 'absolute', // this allows us to place the image anywhere on the screen having to adjust it manually to move. it automatically gets placed in top left corner
+    },
+
+    cancelButton: {
+      backgroundColor: 'transparent', // setting background color to white
+      padding: 5, // sets space between text and edge of button
+      marginBottom: 10,
+      marginHorizontal: 126,
+      borderRadius: 5, // sets smoothness of borders
+      alignItems: 'center', // align the text of the button to the center
+      marginVertical: 5, // sets space between the button and other vertically present components 
+      top: 5,
+    },
+    scrollContainer: {
+      flex: 1,
+      padding: -10,
+    },
+    dropdown: {
+      backgroundColor: '#fff',
+      borderColor: 'rgba(247, 136, 136, 1)',
+      borderWidth: 1,
+      borderRadius: 7,
+      width: '90%',
+      left: 20,
+      marginBottom: 30,
+    },
+    dDText: {
+      fontSize: 16, // Adjust the font size
+      color: 'gray', // Set the text color
+    },
+    selectBox: {
+      borderColor: 'rgba(247, 136, 136, 1)',
+      borderWidth: 1,
+      borderRadius: 5,
+      backgroundColor: '#fff',
+      padding: 10,
+      width: '90%',
+      borderRadius: 7,
+      left: 20,
+      
+    },
+    boxText: {
+      fontSize: 16, // Adjust the font size
+      color: 'gray', // Set the text color
+      fontWeight: 'bold', // Optional: Make the text bold
     },
 });
 
