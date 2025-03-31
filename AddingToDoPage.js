@@ -3,8 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, ScrollView, Text, View, TextInput, Platform, TouchableOpacity, Image, Pressable } from 'react-native'; // Import necessary components for the UI
 import { Ionicons } from '@expo/vector-icons'; // Provides the icons needed for the UI
 import top_corner from './assets/top_corner.png'; // importing the image for background
-import {collection, addDoc} from 'firebase/firestore'; // Importing the necessary components to connect to the database
-import { FIREBASE_FIRESTORE } from './FirebaseConfig';
+
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, set } from 'firebase/database';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -16,7 +15,7 @@ const AddingToDoPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date()); // default value of selected date is a new date
   const [priority, setPriority] = useState(0); // Priority in this case is 0 (no priority) there are three total levels (1,2,3) which indicate low, medium, and high
   const [showPicker, setPicker] = useState(false);
-  //const user = getAuth().currentUser; // This gets the current user logged in
+  
 
 
   const toggleDatePicker = () => {
