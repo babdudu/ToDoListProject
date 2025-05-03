@@ -18,7 +18,7 @@ const SignInScreen = () => {
     const signIn = async () => {
       setLoading(true);
       
-      // Basic email validation
+      //Basic email validation
       if (!email || !email.includes('@')) {
           alert('Please enter a valid email address.');
           setLoading(false);
@@ -26,20 +26,14 @@ const SignInScreen = () => {
       }
       
       try {
-          const response = await signInWithEmailAndPassword(auth, email, password);
-          console.log(response);
-          alert('Login successful');
+          await signInWithEmailAndPassword(auth, email, password);
+          alert('Sign in successful');
           navigation.navigate('userList'); 
       } catch (e) {
           console.log(e);
           if (e.code === 'auth/invalid-credential') {
-              alert('No user found.');
-          } else if (e.code === 'auth/wrong-password') {
-              alert('Incorrect password. Please try again.');
-          }else if(e.code === 'auth/invalid-email'){
-              alert('Invalid email address. Please enter a valid email.');
-          }
-          
+              alert('Incrorrect email or password. Please try again.');
+          }  
           else {
               alert('Sign in failed: ' + e.message);
           }
@@ -49,6 +43,13 @@ const SignInScreen = () => {
   };
 
   return (
+    //makes sure that when the keyboard shows up, it doesn't cover the input fields
+    <KeyboardAvoidingView
+    //choosws 
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    style={{flex: 1}}
+  >
+    
   <View style={styles2.screen}>   
     <View style={styles2.content}>
       <View style1={styles2.contentContainer}>
@@ -56,16 +57,16 @@ const SignInScreen = () => {
           source={require('./assets/top_corner.png')} 
           style={styles2.topImage}
         />
-   
     <View style={styles2.headerContainer}>
     <Text style={styles2.headerTitle}>Welcome Back</Text>
     </View>
 
      <Image
-        source={require('./assets/image 1.png')} 
+        source={require('./assets/signIn.png')} 
         style={styles2.displayImage}
       />
   
+
      {/* Email input field */}
     <View style={styles2.formContainer}>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
@@ -93,19 +94,25 @@ const SignInScreen = () => {
         />
       </View>
 
+    {/* Checks if the loading variable is true  */}
     {loading ? (
+      // Show loading indicator when loading is true
         <ActivityIndicator size="large" color="#ff6b6b" /> 
     ):(
-        <>
-        
+      // If its not loading then show the sign in button
+        //react fragment to group multiple elements without adding extra view
+        <> 
+    
          <TouchableOpacity style={styles2.button} onPress={signIn}>
          <Text style={styles2.buttonText}>Sign in</Text>
          </TouchableOpacity>
 
         </>
-    )}
     
+    )}
+  
   </View>
+
 
     <View style={styles2.linkContainer}>
       <Text style={styles2.linkText}>Don't have an account? </Text>
@@ -116,6 +123,8 @@ const SignInScreen = () => {
   </View>
   </View>
   </View>
+  </KeyboardAvoidingView>
+  
 
   );
 };
@@ -154,7 +163,6 @@ const styles2 = StyleSheet.create({
     displayImage: {
       width: 200,
       height: 240,
-      resizeMode: 'contain',
       alignSelf: 'center',
     },
     
@@ -166,7 +174,7 @@ const styles2 = StyleSheet.create({
       alignContent: 'center',
     },
     headerTitle: {
-      fontSize: 24,
+      fontSize: 30,
       fontWeight: 'bold',
       textAlign: 'center',
     },
@@ -175,6 +183,7 @@ const styles2 = StyleSheet.create({
       textAlign: 'center',
       color: '#888',
     },
+    
     formContainer: {
       marginBottom: 20,
       alignItems: 'center', 
@@ -183,13 +192,13 @@ const styles2 = StyleSheet.create({
     //INPUT FIELD
     input: {
       height: 50,
-      width: '90%', // Increased width for longer input fields
+      width: '90%', 
       borderColor: '#ccc',
       borderWidth: 1,
       borderRadius: 25,
       paddingHorizontal: 15,
       backgroundColor: '#fff',
-      marginBottom: 20, // Space between inputs
+      marginBottom: 20, 
     },
 
     //BUTTONS
@@ -198,7 +207,7 @@ const styles2 = StyleSheet.create({
       borderRadius: 25,
       paddingVertical: 15,
       alignItems: 'center',
-      width: '80%', // Keep button width consistent
+      width: '80%', 
     },
     buttonText: {
       color: '#fff',
