@@ -34,6 +34,23 @@ const addANewProfile = () => {
 
   const addChild = () => {
     //using trim to leave out any necessary spaces 
+    if (!name.trim()) {
+      alert("Please enter the child's name.");
+      return;
+    }
+    if (!age.trim()) {
+      alert("Please enter the child's age.");
+      return;
+    }
+    if (isNaN(age)) {
+      alert("Age must be a number.");
+      return;
+    }
+    if (!color.trim()) {
+      alert("Please select a color.");
+      return;
+    }
+
     if (name.trim()) {
       const user = auth.currentUser;
       const db = getDatabase();
