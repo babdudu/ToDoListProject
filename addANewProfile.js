@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15, // creating the horizontal padding for the text to be inputted in the textbox
     borderRadius: 7, // roundness of the edges
     left: 20,
+    marginLeft: 10,
     fontSize: 16,
     borderColor: 'rgba(247, 136, 136, 1)',
     backgroundColor: 'transparent', // setting background color of the textbox
