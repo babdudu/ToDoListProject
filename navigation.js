@@ -72,27 +72,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#E7EFEF",
   },
   userInfoContainer: {
-    backgroundColor: "#fff", // White background for the container
-    padding: 20, // Add padding inside the container
-    borderRadius: 10, // Rounded corners
+    backgroundColor: "#fff", 
+    padding: 20, 
+    borderRadius: 10, 
     borderWidth: 1,
-    borderColor: "#FD6262", // Border color
-    alignItems: 'center', // Center the text inside the container
-    marginBottom: 20, // Space below the container
-    width: '90%', // Make the container take up most of the screen width
+    borderColor: "#FD6262", 
+    alignItems: 'center', 
+    marginBottom: 20, 
+    width: '90%', 
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
   },
   userText: {
-    fontSize: 20, // Larger font size for the label
+    fontSize: 20,
     color: '#333',
     fontWeight: 'bold',
-    marginBottom: 10, // Space between the label and the email
+    marginBottom: 10, 
   },
   userEmail: {
-    fontSize: 18, // Larger font size for the email
+    fontSize: 18, 
     color: '#666',
   },
   button: {
