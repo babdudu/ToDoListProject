@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    width: "100%",              // ⬅️ wider container
+    width: "100%",              
     alignSelf: "center",
   },   
   dateLabel: {
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     marginTop: 200,
-    textAlign: 'center' // ✅ makes the title centered
+    textAlign: 'center' 
 
   },
   
