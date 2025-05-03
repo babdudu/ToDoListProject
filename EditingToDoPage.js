@@ -509,11 +509,11 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   button: {
-    backgroundColor: 'rgba(247, 136, 136, 1)', // sets the color to coral-ish pink
-    padding: 15, // sets space between text and edge of button
-    borderRadius: 5, // sets smoothness of borders
-    alignItems: 'center', // align the text of the button to the center
-    marginVertical: 5, // sets space between the button and other vertically present components 
+   backgroundColor: '#ff6b6b',
+    padding: 15,
+    borderRadius: 25,
+    alignItems: 'center',
+    marginVertical: 5,
   },
   modalContainer: {
     flex: 1,
