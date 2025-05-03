@@ -195,12 +195,14 @@ const EditingTaskPage = ({ route, navigation }) => {
         borderWidth: 1,
         borderRadius: 5,
         marginBottom: 10,
-        paddingHorizontal: 15,
+        paddingHorizontal: 30,
         backgroundColor: 'white',
         borderColor: '#ff6b6b',
         color: 'gray',
+        marginHorizontal: 13,
         fontSize: 16,
         width: '100%',
+        fontFamily: 'Arial',
       }}
     />
   ) : (
