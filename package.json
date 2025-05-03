@@ -1,0 +1,44 @@
+{
+  "name": "accomplish",
+  "license": "0BSD",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@ant-design/react-native": "^5.3.2",
+    "@expo/vector-icons": "^14.1.0",
+    "@react-native-community/datetimepicker": "^8.3.0",
+    "@react-native-firebase/app": "^21.12.2",
+    "@react-native-firebase/firestore": "^21.12.2",
+    "@react-navigation/native": "^7.1.7",
+    "@react-navigation/native-stack": "^7.2.1",
+    "@react-navigation/stack": "^7.1.2",
+    "expo": "~52.0.38",
+    "expo-linear-gradient": "~14.0.2",
+    "expo-status-bar": "~2.0.1",
+    "firebase": "^11.6.1",
+    "react": "18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
+    "react-native": "^0.76.9",
+    "react-native-calendars": "^1.1310.0",
+    "react-native-dropdown-select-list": "^2.0.5",
+    "react-native-element-dropdown": "^2.12.4",
+    "react-native-paper": "^5.13.3",
+    "react-native-picker-select": "^9.3.1",
+    "react-native-vector-icons": "^10.2.0",
+    "react-native-web": "^0.20.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@react-native-community/cli": "latest",
+    "@types/react": "~18.3.12",
+    "typescript": "^5.3.3"
+  },
+  "private": true
+}
