@@ -151,10 +151,10 @@ const AddingToDoPage = () => {
         </View>
 
         <Text style={styles.labelTB}>Task Name</Text>
-        <TextInput style={styles.input} value={task} onChangeText={setTask} />
+        <TextInput style={styles.input} value={task} onChangeText={setTask}  maxLength={30}/>
 
         <Text style={styles.descTB}>Description</Text>
-        <TextInput style={[styles.inputDesc, { height: 100 }]} value={description} onChangeText={setDescription} multiline />
+        <TextInput style={[styles.inputDesc, { height: 100 }]} value={description} onChangeText={setDescription} multiline  maxLength={100}/>
 
         <View>
   <Text style={styles.dateLabel}>Date</Text>
@@ -187,7 +187,7 @@ const AddingToDoPage = () => {
       min={new Date().toISOString().split('T')[0]} // Restrict to today or later
       onFocus={(event) => event.target.showPicker()} // Open calendar on focus
       style={{
-       height: 50,
+        height: 50,
         borderWidth: 1,
         borderRadius: 5,
         marginBottom: 10,
