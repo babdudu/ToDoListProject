@@ -452,10 +452,10 @@ const styles = StyleSheet.create({
     borderRadius: 7,
   }),
   saveButton: {
-    backgroundColor: "rgba(247, 136, 136, 1)",
+    backgroundColor: '#ff6b6b',
     padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
+    borderRadius: 25,
+    alignItems: 'center',
     marginTop: 18,
   },
   cancelButton: {
