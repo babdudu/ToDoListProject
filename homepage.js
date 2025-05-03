@@ -195,6 +195,7 @@ const ToDoList = () => {
         renderItem={renderTodo}
         keyExtractor={(item) => `${item.childId}-${item.id}`} // Unique key
         contentContainerStyle={styles.listContainer}
+        style={{ flex: 1, width: "100%" }}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No tasks yet. Add a task to get started!</Text>
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     backgroundColor: "f0f0f0",
     paddingHorizontal: 20,
     paddingBottom: 60,
-    alignItems: "center",
+    alignItems: "stretch",
   
   },
   image: {
@@ -302,13 +303,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#FD6262",
     marginVertical: 5,
+    marginLeft:10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     justifyContent: "space-between",
     width: "95%",
-    alignSelf: "center",
+    alignSelf: "stretch",
   },
   todoContent: {
     flex: 1,
