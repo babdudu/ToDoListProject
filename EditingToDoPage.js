@@ -352,8 +352,8 @@ const styles = StyleSheet.create({
     top: -10,               // position from the top of modal
     left: '30%',           // center horizontally
     transform: [{ translateX: -130 }], // shift back by half width to center perfectly
-    zIndex: 1,             // optional: ensures it appears above background
-    resizeMode: 'contain'  // clean scaling
+    zIndex: 1,             
+    resizeMode: 'contain'  
   },
   childContainer: {
     flexDirection: "row",
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    width: "100%",              // ⬅️ wider container
+    width: "100%",            
     alignSelf: "center",
   },   
   labelRow: {
@@ -525,16 +525,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     marginTop: 200,
-    textAlign: 'center' // ✅ makes the title centered
+    textAlign: 'center' 
 
   },
     closeButton: {
-    backgroundColor: '#ff6b6b',     // match main button color
-    borderRadius: 25,              // match rounded edges
-    paddingVertical: 15,           // match height
+    backgroundColor: '#ff6b6b',     
+    borderRadius: 25,              
+    paddingVertical: 15,          
     alignItems: 'center',
-    width: '80%',                  // match consistent width
-    alignSelf: 'center',           // center it in modal
+    width: '80%',                 
+    alignSelf: 'center',          
     marginTop: 20,
   },  
 });
