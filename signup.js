@@ -9,9 +9,10 @@ import SignInScreen from './login';
 
 const SignUpScreen = () => {
   // https://reactnative.dev/docs/intro-react#state
- // https://reactnative.dev/docs/javascript-environment#javascript-syntax-transformers
-    
-    //creating an array that takes in the email, and setEmail to update the email
+  // https://reactnative.dev/docs/javascript-environment#javascript-syntax-transformers
+  //https://www.youtube.com/watch?v=ONAVmsGW6-M&t=32s
+
+    //creating an array that takes in the email and setEmail to update the email
     //utilizing the useState hook to set the initial value of the email 
     const [email, setEmail] = useState('');
     //doing the same for password 
@@ -19,6 +20,7 @@ const SignUpScreen = () => {
     //for confirm password 
     const [confirmPassword, setconfirmPassword] = useState('');
     //creates a loading boolean to show whether a process is in progress or not, and it is initialized as false to start
+    // basically tracks if something is happening or not
     const [loading, setLoading] = useState(false);
 
     //creating a new const and to get the FIBEBASE_AUTH object
@@ -31,9 +33,9 @@ const SignUpScreen = () => {
   // async can use the await keyword, which is used to pause the execution of the function until the promise is resolved
   // https://blog.expo.dev/react-native-meets-async-functions-3e6f81111173
   // https://firebase.google.com/docs/auth/web/start
-  //https://www.youtube.com/watch?v=ONAVmsGW6-M&t=32s
-  const signUp = async () => {
   
+  const signUp = async () => {
+
     //password must be longer than 6
     if (password.length < 6) {
       alert("Password must be at least 6 characters long.");
@@ -50,13 +52,16 @@ const SignUpScreen = () => {
     setLoading(true);
   
     try {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
+       await createUserWithEmailAndPassword(auth, email, password);
       alert("User created successfully")
       //on success, navigate to profiles
       navigation.navigate('userList');
     } catch (e) {
-      // if an error occurs (includes, if email is not valid & if user already exists )
+      if (e.code === 'auth/invalid-email') {
+        alert('Please enter a valid email address.');
+    }else{
       alert("Sign up failed: " + e.message);
+    } 
     } finally {
       //indicate process is over 
       setLoading(false);
@@ -175,7 +180,7 @@ const styles1 = StyleSheet.create({
       position: 'absolute', 
       width: 260,          
       height: 260,  
-      top: -280, 
+      top: -250, 
       right: 90, 
       left: -20,     
     },
@@ -185,7 +190,7 @@ const styles1 = StyleSheet.create({
         marginBottom: 20,
     },
       headerTitle: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
         textAlign: 'center',
         padding: 10,
